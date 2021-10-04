@@ -1,42 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:vocab_trainer/models/models.dart';
+import 'package:vocab_trainer/pages/pages.dart';
+import 'package:vocab_trainer/utils/description_generator.dart';
+
+import 'menu_card.dart';
 
 class CategoryCard extends StatelessWidget {
-  final Category category;
-  const CategoryCard(this.category);
 
-  String get description {
-    final lessonCount = category.lessons.length;
-    var descriptionString = "$lessonCount Lesson";
-    if (lessonCount > 1) descriptionString += "s";
-    return descriptionString;
-  }
+  final Category category;
+  const CategoryCard({Key? key, required this.category}) : super(key: key);
+
+  void _navigateToCategory(BuildContext context) => Navigator.of(context)
+      .pushNamed(CategoryScreen.routeName, arguments: category);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 5,
-      margin: EdgeInsets.all(14),
-      child: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              category.title,
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 18,
-              ),
-            ),
-            Text(description),
-          ],
-        ),
-      ),
+    return MenuCard(
+      title: category.title,
+      description:
+          DescriptionGenerator.generate(category.lessons.length, "Lesson"),
+      navigate: _navigateToCategory,
     );
   }
 }
