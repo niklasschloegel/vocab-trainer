@@ -14,15 +14,18 @@ class CategoriesOverviewScreen extends StatelessWidget {
           "Categories",
         ),
       ),
-      body: GridView.builder(
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (ctx, i) {
-          final category = categories[i];
-          return CategoryCard(key: ValueKey(category.id), category: category);
-        },
-        itemCount: categories.length,
-      ),
+      body: categories.length > 0
+          ? GridView.builder(
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemBuilder: (ctx, i) {
+                final category = categories[i];
+                return CategoryCard(
+                    key: ValueKey(category.id), category: category);
+              },
+              itemCount: categories.length,
+            )
+          : Center(child: Text("No Categories created yet.")),
     );
   }
 }
