@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vocab_trainer/models/models.dart';
+import 'package:vocab_trainer/pages/pages.dart';
 
 class FileCardPreviewCard extends StatelessWidget {
   final FileCard fileCard;
@@ -7,6 +8,12 @@ class FileCardPreviewCard extends StatelessWidget {
     Key? key,
     required this.fileCard,
   }) : super(key: key);
+
+  void _navigateToFileCard(BuildContext context) =>
+      Navigator.of(context).pushNamed(
+        FileCardPreviewScreen.routeName,
+        arguments: fileCard,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class FileCardPreviewCard extends StatelessWidget {
       margin: EdgeInsets.all(14),
       child: InkWell(
         borderRadius: BorderRadius.circular(10.0),
-        onTap: () {},
+        onTap: () => _navigateToFileCard(context),
         child: Padding(
           padding: const EdgeInsets.all(14.0),
           child: Center(
