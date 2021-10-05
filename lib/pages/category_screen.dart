@@ -10,7 +10,10 @@ class CategoryScreen extends StatelessWidget {
     final _category = ModalRoute.of(context)?.settings.arguments as Category;
     final _lessons = _category.lessons;
     return Scaffold(
-      appBar: AppBar(title: Text(_category.title)),
+      appBar: AppBar(
+        title: Text(_category.title),
+        backgroundColor: Theme.of(context).colorScheme.background,
+      ),
       body: _lessons.length > 0
           ? GridView.builder(
               gridDelegate:

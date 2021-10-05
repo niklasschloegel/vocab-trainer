@@ -9,7 +9,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.dark().copyWith(
+          secondary: Colors.indigoAccent,
+          background: Colors.grey.shade800,
+        ),
+      ),
       themeMode: ThemeMode.dark,
       routes: {
         CategoriesOverviewScreen.routeName: (_) => CategoriesOverviewScreen(),

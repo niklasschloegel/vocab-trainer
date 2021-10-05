@@ -17,6 +17,7 @@ class FileCardPreviewScreen extends StatelessWidget {
             Text(title, style: Theme.of(context).textTheme.subtitle1),
             Center(
               child: Card(
+                color: Theme.of(context).colorScheme.background,
                 child: Container(
                   height: _mediaQuery.size.height * 0.34,
                   margin: EdgeInsets.all(10),
@@ -34,6 +35,7 @@ class FileCardPreviewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Filecard Preview"),
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: SafeArea(
         child: Padding(
