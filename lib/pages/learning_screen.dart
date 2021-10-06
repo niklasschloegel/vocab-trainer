@@ -1,6 +1,7 @@
 /// Full credits on the rotation animation go to https://github.com/GONZALEZD/flutter_demos/blob/main/flip_animation/lib/main.dart
 import 'dart:math';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:vocab_trainer/models/models.dart';
@@ -13,6 +14,7 @@ class LearningScreen extends StatefulWidget {
 }
 
 class _LearningScreenState extends State<LearningScreen> {
+  final _carouselController = CarouselController();
   final _animationDuration = Duration(milliseconds: 800);
   var _showEndScreen = false;
   var _showFrontSide = true;
@@ -46,6 +48,7 @@ class _LearningScreenState extends State<LearningScreen> {
         Container(
           key: key,
           height: mediaQuery.size.height * 0.5,
+          margin: EdgeInsets.symmetric(horizontal: 4),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(20.0),
@@ -58,12 +61,6 @@ class _LearningScreenState extends State<LearningScreen> {
             ),
           ),
         );
-
-    Widget _buildFront() =>
-        __buildCard(key: ValueKey(true), content: _currentCard().question);
-
-    Widget _buildRear() =>
-        __buildCard(key: ValueKey(false), content: _currentCard().answer);
 
     Widget __transitionBuilder(Widget widget, Animation<double> animation) {
       final rotateAnim = Tween(begin: pi, end: 0.0).animate(animation);
@@ -85,7 +82,7 @@ class _LearningScreenState extends State<LearningScreen> {
       );
     }
 
-    Widget _buildFlipAnimation() {
+    Widget __buildFlipAnimation(FileCard fileCard) {
       return AnimatedSwitcher(
         duration: _animationDuration,
         transitionBuilder: __transitionBuilder,
@@ -98,11 +95,32 @@ class _LearningScreenState extends State<LearningScreen> {
             children: [...list],
           );
         },
-        child: _showFrontSide ? _buildFront() : _buildRear(),
+        child: _showFrontSide
+            ? __buildCard(key: ValueKey(true), content: fileCard.question)
+            : __buildCard(key: ValueKey(false), content: fileCard.answer),
         switchInCurve: Curves.easeInBack,
         switchOutCurve: Curves.easeInBack.flipped,
       );
     }
+
+    Widget _buildCardCarousel() => CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: false,
+            initialPage: 0,
+            height: mediaQuery.size.height * 0.5,
+            enableInfiniteScroll: false,
+            viewportFraction: 1.0,
+            onScrolled: (d) => setState(
+              () {
+                if (d != null) _currentPosition = d.toInt();
+              },
+            ),
+          ),
+          carouselController: _carouselController,
+          items: _lesson.filecards.map((card) {
+            return __buildFlipAnimation(card);
+          }).toList(),
+        );
 
     // #endregion
 
@@ -110,6 +128,10 @@ class _LearningScreenState extends State<LearningScreen> {
 
     void __nextCard() {
       _flipCard();
+      _carouselController.nextPage(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
       setState(() {
         if ((_currentPosition + 1) < _lesson.filecards.length) {
           _currentPosition++;
@@ -196,16 +218,24 @@ class _LearningScreenState extends State<LearningScreen> {
           dataMap: {
             "correct": _correctCards.length.toDouble(),
             "wrong": _wrongCards.length.toDouble(),
+            "unanswered": (_lesson.filecards.length -
+                    _correctCards.length -
+                    _wrongCards.length)
+                .toDouble(),
           },
           animationDuration: Duration(milliseconds: 500),
-          chartRadius: mediaQuery.size.width / 2.2,
+          chartRadius: mediaQuery.size.width / 2.5,
           colorList: [
             Colors.greenAccent,
             Colors.redAccent,
+            Colors.grey,
           ],
           chartType: ChartType.ring,
           ringStrokeWidth: 40,
-          legendOptions: LegendOptions(showLegends: false),
+          legendOptions: LegendOptions(
+            legendPosition: LegendPosition.bottom,
+            showLegendsInRow: true,
+          ),
           chartValuesOptions: ChartValuesOptions(
             showChartValueBackground: false,
             showChartValues: false,
@@ -218,12 +248,13 @@ class _LearningScreenState extends State<LearningScreen> {
             children: [
               Text(
                 _endMessage(_successRate()),
+                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline5,
               ),
               SizedBox(height: 30),
               Container(
                 width: mediaQuery.size.width * 0.92,
-                height: mediaQuery.size.height * 0.4,
+                height: mediaQuery.size.height * 0.5,
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25.0),
@@ -236,7 +267,8 @@ class _LearningScreenState extends State<LearningScreen> {
                         __buildPieChart(),
                         SizedBox(height: 30),
                         Text(
-                            "${_correctCards.length}/${_lesson.filecards.length} cards correct")
+                            "${_correctCards.length}/${_lesson.filecards.length} cards correct",
+                            style: Theme.of(context).textTheme.subtitle1),
                       ],
                     ),
                   ),
@@ -272,7 +304,7 @@ class _LearningScreenState extends State<LearningScreen> {
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildFlipAnimation(),
+                        _buildCardCarousel(),
                         _buildButtons(),
                       ],
                     ),
