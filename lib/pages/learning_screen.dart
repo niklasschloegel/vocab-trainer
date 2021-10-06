@@ -113,6 +113,7 @@ class _LearningScreenState extends State<LearningScreen> {
             onScrolled: (d) => setState(
               () {
                 if (d != null) _currentPosition = d.toInt();
+                if (!_showFrontSide) _flipCard();
               },
             ),
           ),
