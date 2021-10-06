@@ -1,4 +1,4 @@
-/// Full credits on the rotation animation go to https://github.com/GONZALEZD/flutter_demos/blob/main/flip_animation/lib/main.dart
+/// Full credits on the card flip animation go to https://github.com/GONZALEZD/flutter_demos/blob/main/flip_animation/lib/main.dart
 import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
