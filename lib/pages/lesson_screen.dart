@@ -24,9 +24,7 @@ class LessonScreen extends StatelessWidget {
             )
           : null,
       body: _lesson.filecards.length > 0
-          ? GridView.builder(
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          ? CustomGridView(
               itemBuilder: (ctx, i) {
                 final fileCard = _lesson.filecards[i];
                 return FileCardPreviewCard(

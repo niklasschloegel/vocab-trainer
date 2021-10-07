@@ -15,9 +15,7 @@ class CategoryScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: _lessons.length > 0
-          ? GridView.builder(
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          ? CustomGridView(
               itemBuilder: (ctx, i) {
                 final lesson = _lessons[i];
                 return LessonCard(key: ValueKey(lesson.id), lesson: lesson);

@@ -16,9 +16,7 @@ class CategoriesOverviewScreen extends StatelessWidget {
         ),
       ),
       body: categories.length > 0
-          ? GridView.builder(
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          ? CustomGridView(
               itemBuilder: (ctx, i) {
                 final category = categories[i];
                 return CategoryCard(
