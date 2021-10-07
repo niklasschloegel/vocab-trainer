@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vocab_trainer/models/models.dart';
+import 'package:vocab_trainer/widgets/widgets.dart';
 
 class FileCardPreviewScreen extends StatelessWidget {
   static const routeName = "/filecard-preview";
@@ -37,14 +38,16 @@ class FileCardPreviewScreen extends StatelessWidget {
         title: Text("Filecard Preview"),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
+      body: ResponsiveContainer(
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _buildPreviewCard("Question", _fileCard.question),
+              SizedBox(
+                height: 20,
+              ),
               _buildPreviewCard("Answer", _fileCard.answer),
             ],
           ),

@@ -5,6 +5,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:vocab_trainer/models/models.dart';
+import 'package:vocab_trainer/utils/device_size.dart';
+import 'package:vocab_trainer/widgets/widgets.dart';
 
 class LearningScreen extends StatefulWidget {
   static const routeName = "/learning";
@@ -39,6 +41,10 @@ class _LearningScreenState extends State<LearningScreen> {
     final mediaQuery = MediaQuery.of(context);
     FileCard _currentCard() => _lesson.filecards[_currentPosition];
     double _successRate() => _correctCards.length / _lesson.filecards.length;
+    var _width = mediaQuery.size.width;
+    var _height = mediaQuery.size.height;
+    var _isPortrait = mediaQuery.orientation == Orientation.portrait;
+    double _pieChartRadius = min(_height, min(DeviceSize.xxl, _width)) / 2.5;
 
     // #region Card
     Widget __buildCard({
@@ -215,6 +221,8 @@ class _LearningScreenState extends State<LearningScreen> {
     // #endregion
 
     // #region Endscreen
+
+    // #region PieChart
     Widget __buildPieChart() => PieChart(
           dataMap: {
             "correct": _correctCards.length.toDouble(),
@@ -225,7 +233,7 @@ class _LearningScreenState extends State<LearningScreen> {
                 .toDouble(),
           },
           animationDuration: Duration(milliseconds: 500),
-          chartRadius: mediaQuery.size.width / 2.5,
+          chartRadius: _pieChartRadius,
           colorList: [
             Colors.greenAccent,
             Colors.redAccent,
@@ -234,59 +242,93 @@ class _LearningScreenState extends State<LearningScreen> {
           chartType: ChartType.ring,
           ringStrokeWidth: 40,
           legendOptions: LegendOptions(
-            legendPosition: LegendPosition.bottom,
-            showLegendsInRow: true,
+            legendPosition:
+                !_isPortrait ? LegendPosition.right : LegendPosition.bottom,
+            showLegendsInRow: _isPortrait,
           ),
           chartValuesOptions: ChartValuesOptions(
             showChartValueBackground: false,
             showChartValues: false,
           ),
         );
+    // #endregion
 
-    Widget _buildEndScreen() => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _endMessage(_successRate()),
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline5,
+    Widget __buildEndMessage() => Text(
+          _endMessage(_successRate()),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline5,
+        );
+
+    Widget __buildSummaryText() => Text(
+        "${_correctCards.length}/${_lesson.filecards.length} cards correct",
+        style: Theme.of(context).textTheme.subtitle1);
+
+    Widget __buildChartCard() => Container(
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(25.0),
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  __buildPieChart(),
+                  _isPortrait ? __buildSummaryText() : Container(),
+                ],
               ),
-              SizedBox(height: 30),
-              Container(
-                width: mediaQuery.size.width * 0.92,
-                height: mediaQuery.size.height * 0.5,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        __buildPieChart(),
-                        SizedBox(height: 30),
-                        Text(
-                            "${_correctCards.length}/${_lesson.filecards.length} cards correct",
-                            style: Theme.of(context).textTheme.subtitle1),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 30),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.secondary),
-                ),
-                onPressed: Navigator.of(context).pop,
-                child: Text("Back"),
-              ),
-            ],
+            ),
           ),
         );
+
+    Widget __buildBackButton() => ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+                Theme.of(context).colorScheme.secondary),
+          ),
+          onPressed: Navigator.of(context).pop,
+          child: Text("Back"),
+        );
+
+    Widget __endScreenPortrait() => Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            __buildEndMessage(),
+            __buildChartCard(),
+            __buildBackButton(),
+          ],
+        );
+
+    Widget __endScreenLandscape() => Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  __buildEndMessage(),
+                  SizedBox(height: 8),
+                  __buildSummaryText(),
+                  SizedBox(height: 12),
+                  __buildBackButton(),
+                ],
+              ),
+              flex: 2,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  __buildChartCard(),
+                ],
+              ),
+              flex: 3,
+            ),
+          ],
+        );
+
+    Widget _buildEndScreen() =>
+        _isPortrait ? __endScreenPortrait() : __endScreenLandscape();
     // #endregion
 
     return Scaffold(
@@ -294,23 +336,18 @@ class _LearningScreenState extends State<LearningScreen> {
         title: Text(_lesson.title),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 500),
-              child: _showEndScreen
-                  ? _buildEndScreen()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildCardCarousel(),
-                        _buildButtons(),
-                      ],
-                    ),
-            ),
-          ),
+      body: ResponsiveContainer(
+        child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 500),
+          child: _showEndScreen
+              ? _buildEndScreen()
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildCardCarousel(),
+                    _buildButtons(),
+                  ],
+                ),
         ),
       ),
     );

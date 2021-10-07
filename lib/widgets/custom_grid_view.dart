@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:vocab_trainer/utils/device_size.dart';
+import 'package:vocab_trainer/widgets/responsive_container.dart';
 
 class CustomGridView extends StatefulWidget {
   final Widget Function(BuildContext, int) itemBuilder;
@@ -17,35 +18,21 @@ class CustomGridView extends StatefulWidget {
 }
 
 class _CustomGridViewState extends State<CustomGridView> {
-  late double width;
+  late double _width;
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    double containerWidth = min(DeviceSize.xxl, width);
-    print("build called, width=$width, containerWidth=$containerWidth");
+    _width = MediaQuery.of(context).size.width;
+    double _containerWidth = min(DeviceSize.xxl, _width);
 
-    return SafeArea(
-      child: Container(
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: containerWidth,
-              child: Center(
-                child: GridView.builder(
-                  key: widget.key,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: (containerWidth ~/ 190).toInt(),
-                  ),
-                  itemBuilder: widget.itemBuilder,
-                  itemCount: widget.itemCount,
-                ),
-              ),
-            ),
-          ],
+    return ResponsiveContainer(
+      child: GridView.builder(
+        key: widget.key,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: (_containerWidth ~/ 190).toInt(),
         ),
+        itemBuilder: widget.itemBuilder,
+        itemCount: widget.itemCount,
       ),
     );
   }
