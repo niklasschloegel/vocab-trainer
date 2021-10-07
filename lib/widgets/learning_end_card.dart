@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:vocab_trainer/utils/device_size.dart';
 
-class LearningEndCard extends StatefulWidget {
+class LearningEndCard extends StatelessWidget {
   final Map<String, double> dataMap;
   final String endMessage;
   final String summaryText;
+
   const LearningEndCard({
     Key? key,
     required this.dataMap,
@@ -15,21 +16,15 @@ class LearningEndCard extends StatefulWidget {
     required this.summaryText,
   }) : super(key: key);
 
-  @override
-  _LearningEndCardState createState() => _LearningEndCardState();
-}
-
-class _LearningEndCardState extends State<LearningEndCard> {
-  @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    var _width = mediaQuery.size.width;
-    var _height = mediaQuery.size.height;
-    var _isPortrait = mediaQuery.orientation == Orientation.portrait;
+    var _mediaQuery = MediaQuery.of(context);
+    var _width = _mediaQuery.size.width;
+    var _height = _mediaQuery.size.height;
+    var _isPortrait = _mediaQuery.orientation == Orientation.portrait;
     double _pieChartRadius = min(_height, min(DeviceSize.xxl, _width)) / 2.5;
 
     Widget __buildPieChart() => PieChart(
-          dataMap: widget.dataMap,
+          dataMap: dataMap,
           animationDuration: Duration(milliseconds: 500),
           chartRadius: _pieChartRadius,
           colorList: [
@@ -51,13 +46,13 @@ class _LearningEndCardState extends State<LearningEndCard> {
         );
 
     Widget __buildEndMessage() => Text(
-          widget.endMessage,
+          endMessage,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline5,
         );
 
     Widget __buildSummaryText() =>
-        Text(widget.summaryText, style: Theme.of(context).textTheme.subtitle1);
+        Text(summaryText, style: Theme.of(context).textTheme.subtitle1);
 
     Widget __buildChartCard() => Container(
           child: Card(

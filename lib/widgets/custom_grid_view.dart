@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:vocab_trainer/utils/device_size.dart';
 import 'package:vocab_trainer/widgets/responsive_container.dart';
 
-class CustomGridView extends StatefulWidget {
+class CustomGridView extends StatelessWidget {
   final Widget Function(BuildContext, int) itemBuilder;
   final int itemCount;
   const CustomGridView({
@@ -14,25 +14,19 @@ class CustomGridView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CustomGridView> createState() => _CustomGridViewState();
-}
-
-class _CustomGridViewState extends State<CustomGridView> {
-  late double _width;
-
-  @override
   Widget build(BuildContext context) {
-    _width = MediaQuery.of(context).size.width;
+    var _mediaQuery = MediaQuery.of(context);
+    var _width = _mediaQuery.size.width;
     double _containerWidth = min(DeviceSize.xxl, _width);
 
     return ResponsiveContainer(
       child: GridView.builder(
-        key: widget.key,
+        key: key,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: (_containerWidth ~/ 190).toInt(),
         ),
-        itemBuilder: widget.itemBuilder,
-        itemCount: widget.itemCount,
+        itemBuilder: itemBuilder,
+        itemCount: itemCount,
       ),
     );
   }
