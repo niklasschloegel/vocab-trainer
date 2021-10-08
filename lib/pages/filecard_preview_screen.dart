@@ -20,10 +20,12 @@ class FileCardPreviewScreen extends StatelessWidget {
               child: Card(
                 color: Theme.of(context).colorScheme.background,
                 child: Container(
-                  height: _mediaQuery.size.height * 0.34,
-                  margin: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
                   width: double.infinity,
-                  child: Text(content),
+                  child: Text(
+                    content,
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
             ),

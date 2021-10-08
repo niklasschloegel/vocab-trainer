@@ -56,10 +56,12 @@ class _LearningScreenState extends State<LearningScreen> {
             borderRadius: BorderRadius.circular(20.0),
             color: Theme.of(context).colorScheme.background,
           ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Text(content),
+          child: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Text(content),
+              ),
             ),
           ),
         );

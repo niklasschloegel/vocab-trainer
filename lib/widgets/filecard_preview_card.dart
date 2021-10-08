@@ -36,6 +36,7 @@ class FileCardPreviewCard extends StatelessWidget {
               question,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
+              maxLines: 6,
               style: TextStyle(fontSize: 11),
             ),
           ),

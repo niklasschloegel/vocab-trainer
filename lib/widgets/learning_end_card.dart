@@ -86,7 +86,9 @@ class LearningEndCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             __buildEndMessage(),
+            SizedBox(height: 5),
             __buildChartCard(),
+            SizedBox(height: 5),
             __buildBackButton(),
           ],
         );
@@ -118,6 +120,10 @@ class LearningEndCard extends StatelessWidget {
           ],
         );
 
-    return _isPortrait ? __endScreenPortrait() : __endScreenLandscape();
+    return SingleChildScrollView(
+      child: (_isPortrait || _width <= DeviceSize.s)
+          ? __endScreenPortrait()
+          : __endScreenLandscape(),
+    );
   }
 }
