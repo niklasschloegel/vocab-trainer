@@ -17,13 +17,14 @@ class CustomGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
     var _width = _mediaQuery.size.width;
-    double _containerWidth = min(DeviceSize.xxl, _width);
+    var _containerWidth = min(DeviceSize.xxl, _width);
+    var _gridCount = max(1, (_containerWidth ~/ 190).round());
 
     return ResponsiveContainer(
       child: GridView.builder(
         key: key,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: (_containerWidth ~/ 190).toInt(),
+          crossAxisCount: _gridCount,
         ),
         itemBuilder: itemBuilder,
         itemCount: itemCount,

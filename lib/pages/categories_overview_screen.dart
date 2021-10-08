@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vocab_trainer/data/dummy_data.dart';
+import 'package:vocab_trainer/utils/description_generator.dart';
 import 'package:vocab_trainer/widgets/widgets.dart';
+
+import 'category_screen.dart';
 
 class CategoriesOverviewScreen extends StatelessWidget {
   static const routeName = "/";
@@ -16,14 +19,20 @@ class CategoriesOverviewScreen extends StatelessWidget {
         ),
       ),
       body: categories.length > 0
-          ? CustomGridView(
-              itemBuilder: (ctx, i) {
-                final category = categories[i];
-                return CategoryCard(
-                    key: ValueKey(category.id), category: category);
-              },
-              itemCount: categories.length,
-            )
+          ? CategoryLessonCollectionView(
+              menuItems: categories
+                  .map((category) => MenuItem(
+                      id: category.id,
+                      title: category.title,
+                      description: DescriptionGenerator.generate(
+                        category.lessons.length,
+                        "Lesson",
+                      ),
+                      navigate: (ctx) => Navigator.of(ctx).pushNamed(
+                            CategoryScreen.routeName,
+                            arguments: category,
+                          )))
+                  .toList())
           : Center(child: Text("No Categories created yet.")),
     );
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vocab_trainer/models/models.dart';
+import 'package:vocab_trainer/utils/description_generator.dart';
 import 'package:vocab_trainer/widgets/widgets.dart';
+
+import 'lesson_screen.dart';
 
 class CategoryScreen extends StatelessWidget {
   static const routeName = "/category";
@@ -15,13 +18,20 @@ class CategoryScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: _lessons.length > 0
-          ? CustomGridView(
-              itemBuilder: (ctx, i) {
-                final lesson = _lessons[i];
-                return LessonCard(key: ValueKey(lesson.id), lesson: lesson);
-              },
-              itemCount: _category.lessons.length,
-            )
+          ? CategoryLessonCollectionView(
+              menuItems: _lessons
+                  .map((lesson) => MenuItem(
+                      id: lesson.id,
+                      title: lesson.title,
+                      description: DescriptionGenerator.generate(
+                        lesson.filecards.length,
+                        "Card",
+                      ),
+                      navigate: (ctx) => Navigator.of(ctx).pushNamed(
+                            LessonScreen.routeName,
+                            arguments: lesson,
+                          )))
+                  .toList())
           : Center(
               child: Text("No Lessons created yet."),
             ),
