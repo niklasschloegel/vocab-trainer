@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vocab_trainer/utils/device_size.dart';
+import 'package:vocab_trainer/widgets/widgets.dart';
 
 import 'custom_grid_view.dart';
 import 'menu_card.dart';
@@ -11,17 +13,52 @@ class CategoryLessonCollectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomGridView(
-      itemBuilder: (ctx, index) {
-        final menuItem = menuItems[index];
-        return MenuCard(
-          key: ValueKey(menuItem.id),
-          title: menuItem.title,
-          description: menuItem.description,
-          navigate: menuItem.navigate,
-        );
-      },
-      itemCount: menuItems.length,
-    );
+    var _mediaQuery = MediaQuery.of(context);
+    var _shortestSide = _mediaQuery.size.shortestSide;
+    var _fontScale = _mediaQuery.textScaleFactor;
+    bool _showGrid() {
+      if (_shortestSide < DeviceSize.m) return false;
+      if (_shortestSide < DeviceSize.xl && _fontScale > 1.5) return false;
+      return true;
+    }
+
+    print("shortestSide: $_shortestSide fontScale: $_fontScale");
+    //TODO: ListView if condition
+    //TODO: Kopplung überprüfen
+    return _showGrid()
+        ? CustomGridView(
+            itemBuilder: (ctx, index) {
+              final menuItem = menuItems[index];
+              return MenuCard(
+                key: ValueKey(menuItem.id),
+                title: menuItem.title,
+                description: menuItem.description,
+                navigate: menuItem.navigate,
+              );
+            },
+            itemCount: menuItems.length,
+          )
+        : ResponsiveContainer(
+            child: ListView.builder(
+              itemBuilder: (ctx, index) {
+                final menuItem = menuItems[index];
+                return Card(
+                  child: ListTile(
+                    key: ValueKey(menuItem.id),
+                    title: Text(
+                      menuItem.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
+                    subtitle: Text(menuItem.description),
+                    onTap: () => menuItem.navigate(ctx),
+                  ),
+                );
+              },
+              itemCount: menuItems.length,
+            ),
+          );
   }
 }

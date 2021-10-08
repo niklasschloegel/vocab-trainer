@@ -32,7 +32,7 @@ class MenuCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                maxLines: 3,
+                maxLines: 6,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
