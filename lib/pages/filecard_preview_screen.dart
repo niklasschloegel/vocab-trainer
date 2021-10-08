@@ -32,7 +32,10 @@ class FileCardPreviewScreen extends StatelessWidget {
       );
     }
 
-    final _fileCard = ModalRoute.of(context)?.settings.arguments as FileCard;
+    final _args = ModalRoute.of(context)?.settings.arguments as List<String>;
+    final _question = _args[0];
+    final _answer = _args[1];
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Filecard Preview"),
@@ -44,11 +47,11 @@ class FileCardPreviewScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _buildPreviewCard("Question", _fileCard.question),
+              _buildPreviewCard("Question", _question),
               SizedBox(
                 height: 20,
               ),
-              _buildPreviewCard("Answer", _fileCard.answer),
+              _buildPreviewCard("Answer", _answer),
             ],
           ),
         ),

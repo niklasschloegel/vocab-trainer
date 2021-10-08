@@ -3,16 +3,18 @@ import 'package:vocab_trainer/models/models.dart';
 import 'package:vocab_trainer/pages/pages.dart';
 
 class FileCardPreviewCard extends StatelessWidget {
-  final FileCard fileCard;
+  final String question;
+  final String answer;
   const FileCardPreviewCard({
     Key? key,
-    required this.fileCard,
+    required this.question,
+    required this.answer,
   }) : super(key: key);
 
   void _navigateToFileCard(BuildContext context) =>
       Navigator.of(context).pushNamed(
         FileCardPreviewScreen.routeName,
-        arguments: fileCard,
+        arguments: [question, answer],
       );
 
   @override
@@ -31,8 +33,9 @@ class FileCardPreviewCard extends StatelessWidget {
           padding: const EdgeInsets.all(14.0),
           child: Center(
             child: Text(
-              fileCard.question,
+              question,
               textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 11),
             ),
           ),

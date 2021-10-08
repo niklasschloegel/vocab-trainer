@@ -33,7 +33,10 @@ class CategoryScreen extends StatelessWidget {
                           )))
                   .toList())
           : Center(
-              child: Text("No Lessons created yet."),
+              child: Text(
+                "No Lessons created yet.",
+                textAlign: TextAlign.center,
+              ),
             ),
     );
   }

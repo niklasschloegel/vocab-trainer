@@ -29,13 +29,17 @@ class LessonScreen extends StatelessWidget {
                 final fileCard = _lesson.filecards[i];
                 return FileCardPreviewCard(
                   key: ValueKey(fileCard.id),
-                  fileCard: fileCard,
+                  question: fileCard.question,
+                  answer: fileCard.answer,
                 );
               },
               itemCount: _lesson.filecards.length,
             )
           : Center(
-              child: Text("No Filecards created yet."),
+              child: Text(
+                "No Filecards created yet.",
+                textAlign: TextAlign.center,
+              ),
             ),
     );
   }

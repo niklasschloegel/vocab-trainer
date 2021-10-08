@@ -33,7 +33,12 @@ class CategoriesOverviewScreen extends StatelessWidget {
                             arguments: category,
                           )))
                   .toList())
-          : Center(child: Text("No Categories created yet.")),
+          : Center(
+              child: Text(
+                "No Categories created yet.",
+                textAlign: TextAlign.center,
+              ),
+            ),
     );
   }
 }

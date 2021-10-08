@@ -23,8 +23,7 @@ class CategoryLessonCollectionView extends StatelessWidget {
     }
 
     print("shortestSide: $_shortestSide fontScale: $_fontScale");
-    //TODO: ListView if condition
-    //TODO: Kopplung überprüfen
+
     return _showGrid()
         ? CustomGridView(
             itemBuilder: (ctx, index) {
