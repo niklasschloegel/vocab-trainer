@@ -18,25 +18,33 @@ class FileCardPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.background,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 5,
-      margin: EdgeInsets.all(14),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10.0),
-        onTap: () => _navigateToFileCard(context),
-        child: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Center(
-            child: Text(
-              question,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 6,
-              style: TextStyle(fontSize: 11),
+    return Semantics(
+      button: true,
+      enabled: true,
+      label: question,
+      child: ExcludeSemantics(
+        excluding: true,
+        child: Card(
+          color: Theme.of(context).colorScheme.background,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 5,
+          margin: EdgeInsets.all(14),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(10.0),
+            onTap: () => _navigateToFileCard(context),
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Center(
+                child: Text(
+                  question,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 6,
+                  style: TextStyle(fontSize: 11),
+                ),
+              ),
             ),
           ),
         ),
