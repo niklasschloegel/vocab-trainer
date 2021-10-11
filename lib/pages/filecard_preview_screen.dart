@@ -41,17 +41,19 @@ class FileCardPreviewScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: ResponsiveContainer(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _buildPreviewCard("Question", _question),
-              SizedBox(
-                height: 20,
-              ),
-              _buildPreviewCard("Answer", _answer),
-            ],
+        child: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _buildPreviewCard("Question", _question),
+                SizedBox(
+                  height: 20,
+                ),
+                _buildPreviewCard("Answer", _answer),
+              ],
+            ),
           ),
         ),
       ),

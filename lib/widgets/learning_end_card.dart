@@ -120,10 +120,13 @@ class LearningEndCard extends StatelessWidget {
           ],
         );
 
-    return SingleChildScrollView(
-      child: (_isPortrait || _width <= DeviceSize.s)
-          ? __endScreenPortrait()
-          : __endScreenLandscape(),
+    return Container(
+      alignment: Alignment.center,
+      child: SingleChildScrollView(
+        child: (_isPortrait || _width <= DeviceSize.s)
+            ? __endScreenPortrait()
+            : __endScreenLandscape(),
+      ),
     );
   }
 }
