@@ -222,6 +222,7 @@ class _LearningScreenState extends State<LearningScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_lesson.title),
+        leading: CustomBackButton(),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: ResponsiveContainer(

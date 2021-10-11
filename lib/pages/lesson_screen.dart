@@ -12,6 +12,7 @@ class LessonScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(_lesson.title),
+        leading: CustomBackButton(),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       floatingActionButton: _lesson.filecards.length > 0

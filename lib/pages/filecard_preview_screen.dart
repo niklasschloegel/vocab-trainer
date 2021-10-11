@@ -38,6 +38,7 @@ class FileCardPreviewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Filecard Preview"),
+        leading: CustomBackButton(),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: ResponsiveContainer(
