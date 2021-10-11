@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vocab_trainer/models/models.dart';
 import 'package:vocab_trainer/pages/pages.dart';
 
 class FileCardPreviewCard extends StatelessWidget {

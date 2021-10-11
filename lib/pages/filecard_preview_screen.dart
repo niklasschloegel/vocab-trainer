@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vocab_trainer/models/models.dart';
 import 'package:vocab_trainer/widgets/widgets.dart';
 
 class FileCardPreviewScreen extends StatelessWidget {
@@ -7,7 +6,9 @@ class FileCardPreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _mediaQuery = MediaQuery.of(context);
+    final _args = ModalRoute.of(context)?.settings.arguments as List<String>;
+    final _question = _args[0];
+    final _answer = _args[1];
 
     Widget _buildPreviewCard(String title, String content) {
       return Padding(
@@ -33,10 +34,6 @@ class FileCardPreviewScreen extends StatelessWidget {
         ),
       );
     }
-
-    final _args = ModalRoute.of(context)?.settings.arguments as List<String>;
-    final _question = _args[0];
-    final _answer = _args[1];
 
     return Scaffold(
       appBar: AppBar(

@@ -16,7 +16,6 @@ class CustomGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
-    var _fontScale = _mediaQuery.textScaleFactor;
     var _width = _mediaQuery.size.width;
     var _containerWidth = min(DeviceSize.xxl, _width);
     int _gridCount() {

@@ -51,6 +51,7 @@ class _LearningScreenState extends State<LearningScreen> {
           key: key,
           height: _height * 0.5,
           margin: EdgeInsets.symmetric(horizontal: 4),
+          alignment: Alignment.center,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(20.0),
