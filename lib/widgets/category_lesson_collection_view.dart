@@ -22,8 +22,6 @@ class CategoryLessonCollectionView extends StatelessWidget {
       return true;
     }
 
-    print("shortestSide: $_shortestSide fontScale: $_fontScale");
-
     return _showGrid()
         ? CustomGridView(
             itemBuilder: (ctx, index) {

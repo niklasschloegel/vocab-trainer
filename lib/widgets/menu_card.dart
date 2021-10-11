@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 
 class MenuCard extends StatelessWidget {
   final String title;
@@ -18,8 +17,7 @@ class MenuCard extends StatelessWidget {
     return Semantics(
       button: true,
       enabled: true,
-      label: "$title.$description",
-      // textDirection: TextDirection.ltr,
+      label: "$title. $description",
       child: ExcludeSemantics(
         excluding: true,
         child: Card(
