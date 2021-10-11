@@ -16,7 +16,10 @@ class FileCardPreviewScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Theme.of(context).textTheme.subtitle1),
+            Semantics(
+              header: true,
+              child: Text(title, style: Theme.of(context).textTheme.subtitle1),
+            ),
             Center(
               child: Card(
                 color: Theme.of(context).colorScheme.background,

@@ -8,12 +8,14 @@ class LearningEndCard extends StatelessWidget {
   final Map<String, double> dataMap;
   final String endMessage;
   final String summaryText;
+  final String a11ySummary;
 
   const LearningEndCard({
     Key? key,
     required this.dataMap,
     required this.endMessage,
     required this.summaryText,
+    required this.a11ySummary,
   }) : super(key: key);
 
   Widget build(BuildContext context) {
@@ -45,29 +47,37 @@ class LearningEndCard extends StatelessWidget {
           ),
         );
 
-    Widget __buildEndMessage() => Text(
-          endMessage,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline5,
+    Widget __buildEndMessage() => Semantics(
+          header: true,
+          child: Text(
+            endMessage,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headline5,
+          ),
         );
 
     Widget __buildSummaryText() =>
         Text(summaryText, style: Theme.of(context).textTheme.subtitle1);
 
-    Widget __buildChartCard() => Container(
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
+    Widget __buildChartCard() => Semantics(
+          label: a11ySummary,
+          child: ExcludeSemantics(
             child: Container(
-              margin: const EdgeInsets.all(25.0),
-              padding: const EdgeInsets.all(25.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  __buildPieChart(),
-                  _isPortrait ? __buildSummaryText() : Container(),
-                ],
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.all(25.0),
+                  padding: const EdgeInsets.all(25.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      __buildPieChart(),
+                      _isPortrait ? __buildSummaryText() : Container(),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),

@@ -278,6 +278,8 @@ class _LearningScreenState extends State<LearningScreen> {
                     endMessage: _endMessage(_successRate()),
                     summaryText:
                         "${_correctCards.length}/${_lesson.filecards.length} cards correct",
+                    a11ySummary:
+                        "${_correctCards.length} of ${_lesson.filecards.length} cards correct",
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
