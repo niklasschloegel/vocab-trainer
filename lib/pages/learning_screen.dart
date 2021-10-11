@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:vocab_trainer/models/models.dart';
 import 'package:vocab_trainer/widgets/widgets.dart';
 
@@ -46,6 +47,7 @@ class _LearningScreenState extends State<LearningScreen> {
     Widget __buildCard({
       required Key key,
       required String content,
+      required String a11yLabel,
     }) =>
         Container(
           key: key,
@@ -61,7 +63,10 @@ class _LearningScreenState extends State<LearningScreen> {
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(14.0),
-                child: Text(content),
+                child: Semantics(
+                  label: a11yLabel,
+                  child: Text(content),
+                ),
               ),
             ),
           ),
@@ -101,8 +106,16 @@ class _LearningScreenState extends State<LearningScreen> {
           );
         },
         child: _showFrontSide
-            ? __buildCard(key: ValueKey(true), content: fileCard.question)
-            : __buildCard(key: ValueKey(false), content: fileCard.answer),
+            ? __buildCard(
+                key: ValueKey(true),
+                content: fileCard.question,
+                a11yLabel: "Frage",
+              )
+            : __buildCard(
+                key: ValueKey(false),
+                content: fileCard.answer,
+                a11yLabel: "Antwort",
+              ),
         switchInCurve: Curves.easeInBack,
         switchOutCurve: Curves.easeInBack.flipped,
       );
@@ -164,15 +177,25 @@ class _LearningScreenState extends State<LearningScreen> {
       required VoidCallback onTapHandler,
       required IconData icon,
       required Color color,
+      required String a11yLabel,
+      required SemanticsSortKey sortKey,
     }) =>
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-            padding: EdgeInsets.all(17.0),
-            primary: color,
+        MergeSemantics(
+          child: Semantics(
+            sortKey: sortKey,
+            button: true,
+            enabled: true,
+            label: a11yLabel,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                padding: EdgeInsets.all(17.0),
+                primary: color,
+              ),
+              onPressed: onTapHandler,
+              child: Icon(icon),
+            ),
           ),
-          onPressed: onTapHandler,
-          child: Icon(icon),
         );
 
     Widget __buildFlipButton() => Container(
@@ -181,6 +204,8 @@ class _LearningScreenState extends State<LearningScreen> {
             onTapHandler: _flipCard,
             icon: Icons.sync,
             color: Theme.of(context).colorScheme.secondary,
+            a11yLabel: "Karte drehen",
+            sortKey: OrdinalSortKey(_showFrontSide ? 1 : 2),
           ),
         );
 
@@ -188,12 +213,16 @@ class _LearningScreenState extends State<LearningScreen> {
           onTapHandler: _wrongHandler,
           icon: Icons.close,
           color: Theme.of(context).colorScheme.error,
+          a11yLabel: "Falsch beantwortet",
+          sortKey: OrdinalSortKey(1),
         );
 
     Widget __buildCorrectButton() => __buildButton(
           onTapHandler: _correctHandler,
           icon: Icons.check,
           color: Colors.greenAccent,
+          a11yLabel: "Richtig beantwortet",
+          sortKey: OrdinalSortKey(3),
         );
 
     Widget __buildIconRow() => Row(
@@ -220,35 +249,44 @@ class _LearningScreenState extends State<LearningScreen> {
     // #endregion
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_lesson.title),
-        leading: CustomBackButton(),
-        backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: Semantics(
+          sortKey: OrdinalSortKey(_showFrontSide ? 2 : 4),
+          child: AppBar(
+            title: Text(_lesson.title),
+            leading: CustomBackButton(),
+            backgroundColor: Theme.of(context).colorScheme.background,
+          ),
+        ),
       ),
-      body: ResponsiveContainer(
-        child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 500),
-          child: _showEndScreen
-              ? LearningEndCard(
-                  dataMap: {
-                    "correct": _correctCards.length.toDouble(),
-                    "wrong": _wrongCards.length.toDouble(),
-                    "unanswered": (_lesson.filecards.length -
-                            _correctCards.length -
-                            _wrongCards.length)
-                        .toDouble(),
-                  },
-                  endMessage: _endMessage(_successRate()),
-                  summaryText:
-                      "${_correctCards.length}/${_lesson.filecards.length} cards correct",
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildCardCarousel(),
-                    _buildButtons(),
-                  ],
-                ),
+      body: Semantics(
+        sortKey: OrdinalSortKey(0),
+        child: ResponsiveContainer(
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 500),
+            child: _showEndScreen
+                ? LearningEndCard(
+                    dataMap: {
+                      "correct": _correctCards.length.toDouble(),
+                      "wrong": _wrongCards.length.toDouble(),
+                      "unanswered": (_lesson.filecards.length -
+                              _correctCards.length -
+                              _wrongCards.length)
+                          .toDouble(),
+                    },
+                    endMessage: _endMessage(_successRate()),
+                    summaryText:
+                        "${_correctCards.length}/${_lesson.filecards.length} cards correct",
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildCardCarousel(),
+                      _buildButtons(),
+                    ],
+                  ),
+          ),
         ),
       ),
     );
